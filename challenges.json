@@ -93,9 +93,10 @@
     {
       "id": "action-13",
       "category": "ACTION",
-      "text": "Run in slow motion on the spot for 5 seconds.",
-      "groupSize": 1,
-      "image": null
+      "text": "Make a 3-person plank together and hold it for 5 seconds.",
+      "groupSize": 3,
+      "image": null,
+      "link": "https://www.instagram.com/reels/DRROVTIiAVC/"
     },
     {
       "id": "action-14",
@@ -107,9 +108,10 @@
     {
       "id": "action-15",
       "category": "ACTION",
-      "text": "Freeze like a statue for 10 seconds.",
-      "groupSize": 1,
-      "image": null
+      "text": "Make a 3-person star together and hold it for 5 seconds.",
+      "groupSize": 3,
+      "image": null,
+      "link": "https://www.instagram.com/reel/DXmkz1zjJsK/"
     },
     {
       "id": "action-16",
@@ -177,8 +179,8 @@
     {
       "id": "action-25",
       "category": "ACTION",
-      "text": "Waddle like a penguin across the room.",
-      "groupSize": 1,
+      "text": "Make a team of 3 and waddle like penguins across the room in a line.",
+      "groupSize": 3,
       "image": null
     },
     {
@@ -520,7 +522,7 @@
     {
       "id": "touch-07",
       "category": "TOUCH",
-      "text": "Touch a wall with both hands.",
+      "text": "Touch a table with both hands.",
       "image": null
     },
     {
@@ -616,13 +618,13 @@
     {
       "id": "touch-23",
       "category": "TOUCH",
-      "text": "Touch three different walls.",
+      "text": "Touch 2 different door handles.",
       "image": null
     },
     {
       "id": "touch-24",
       "category": "TOUCH",
-      "text": "Touch a picture or poster on the wall.",
+      "text": "Touch a chair with your foot.",
       "image": null
     },
     {
