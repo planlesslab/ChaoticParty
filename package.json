@@ -1,0 +1,10 @@
+{
+  "name": "chaotic-party",
+  "version": "0.2.0",
+  "description": "Race your friends to find, touch, say and do silly real-world challenges, all from your phone.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$code": {
+        ".read": "auth != null",
+        ".write": "auth != null && $code.matches(/^[A-HJ-NP-Z]{4}$/)",
+        ".validate": "newData.hasChild('players')"
+      }
+    }
+  }
+}
