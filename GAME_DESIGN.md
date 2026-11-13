@@ -20,7 +20,7 @@ This document defines the rules, scoring, challenge system and player screens fo
 - **Host**: the player who created the room. The host plays normally and also has three extra buttons:
   - **Start**: begins the game (needs at least 3 players).
   - **Next**: moves from the round results to the next challenge.
-  - **Skip**: ends the current round immediately. Nobody scores.
+  - **Skip**: throws away the current challenge and deals a new one for the same round (with a fresh 3-second countdown). A skipped challenge doesn't count, and nobody scores from it.
 - **Player**: everyone else.
 - If the host disconnects for more than 15 seconds, host controls pass to the player who joined next earliest.
 
@@ -65,12 +65,12 @@ This document defines the rules, scoring, challenge system and player screens fo
 
 1. Everyone sees the question and a big **BUZZ IN** button. The 20-second round timer starts.
 2. The first player to buzz (as received by the server) becomes the **answerer**. Everyone else's buzz button is disabled and shows "Sam is answering…".
-3. The answerer says the answer out loud and has **5 seconds** to tap **✅ Got it** or **❌ Missed**.
-   - If 5 seconds pass with no tap, the **Got it** button disappears and it counts as **Missed**.
-4. **Got it** ends the round:
+3. The answerer sees a big **5-second countdown** and a single **COMPLETED** button. They say the answer out loud and tap COMPLETED.
+   - If 5 seconds pass with no tap, the button disappears and it counts as **Missed**.
+4. **COMPLETED** ends the round:
    - **+3** if it was the **first buzz** of the round.
    - **+2** if it came from a **re-buzz** (any buzz after a miss).
-5. **Missed** reopens buzzing for everyone, **except the player who just missed** (no buzzing twice in a row). They can buzz again after someone else has had a turn.
+5. A **miss** (time ran out) reopens buzzing for everyone, **except the player who just missed** (no buzzing twice in a row). They can buzz again after someone else has had a turn.
 6. If the 20-second timer runs out while nobody is answering, the round ends with no points. If it runs out **during** an answer window, that answerer still gets their full 5 seconds.
 
 ### Scoring summary
@@ -86,7 +86,7 @@ This document defines the rules, scoring, challenge system and player screens fo
 | SAY: correct on the first buzz | 3 |
 | SAY: correct on a re-buzz | 2 |
 | SAY: missed / timed out | 0 |
-| Round skipped by host | 0 for everyone |
+| Challenge skipped by host | Replaced with a new challenge; 0 for everyone |
 
 ### Ranking and ties
 
@@ -100,7 +100,8 @@ This document defines the rules, scoring, challenge system and player screens fo
 - **No repeats:** a challenge never appears twice in one game. With **Play again**, the room avoids challenges it has already played until the pool runs out, then reshuffles everything.
 - **Variety:** the dealer avoids putting the same category 3 times in a row. It swaps in the next eligible challenge of a different category.
 - Every challenge is family-friendly and only uses the living room, office or kitchen.
-- If an object in a challenge doesn't exist in your home, the host taps **Skip**.
+- If an object in a challenge doesn't exist in your home, the host taps **Skip** and a new challenge is dealt for the same round.
+- A challenge can have an optional `link` (e.g. a video showing a pose). It appears as a **▶ Watch how** button.
 
 ## 6. Player screens
 
@@ -128,7 +129,8 @@ Design principles: one big button per screen, readable from arm's length, works 
 
 ### 6.3 Lobby
 
-- Big room code at the top ("Tell your friends: **KBZW**").
+- Big room code at the top ("Tell your friends: **KBZW**"), a **Share invite link** button and the link itself (tap to copy).
+- Invite links open straight onto "You're joining room KBZW", so friends only type their name.
 - Player list with a 👑 next to the host.
 - Host: **Start** button (disabled with "Need 3+ players" until there are 3).
 - Others: "Waiting for host to start…".
@@ -160,7 +162,7 @@ Live strip: "Ana ✔ · Ben ✔ · 6 still going".
 |---|---|
 | Can buzz | Big purple **BUZZ IN** |
 | Someone else answering | Button disabled: "Ben is answering… 4s" |
-| You're answering | "Say it out loud!" + **✅ Got it** / **❌ Missed** + 5s countdown |
+| You're answering | "Say it out loud!" + big 5-4-3-2-1 countdown + **COMPLETED** |
 | You just missed | Button disabled: "Wait for someone else to have a go" |
 | Answer window expired | "⏰ Missed!" (1 second), then buzzing reopens |
 

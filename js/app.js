@@ -1,8 +1,8 @@
 // Chaotic Party — phone client.
 // The room lives in Firebase; every action runs the rules engine inside a
 // database transaction, and every phone re-renders when the room changes.
-import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js';
-import config from './config.js';
+import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js?v=0.3.0';
+import config from './config.js?v=0.3.0';
 
 const $app = document.getElementById('app');
 const $banner = document.getElementById('banner');
@@ -14,6 +14,7 @@ const CATS = {
   FIND: { icon: '🔍', button: 'Found it' },
   TOUCH: { icon: '✋', button: 'Done' },
 };
+export const VERSION = '0.3.0';
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1';
@@ -218,22 +219,29 @@ function viewHome() {
       <button class="btn block" data-action="go-create">＋ Create room</button>
       <button class="btn pop block" data-action="go-join">→ Join room</button>
     </div>
-    <p class="safety"><b>House rules:</b> walk, don't run. Nothing hot or sharp. Bathrooms and bedrooms are off limits. Put things back after each round.</p>`;
+    <p class="safety"><b>House rules:</b> walk, don't run. Nothing hot or sharp. Bathrooms and bedrooms are off limits. Put things back after each round.</p>
+    <p class="muted small center" style="margin:0">v${VERSION}</p>`;
 }
 
 function viewForm(kind) {
   const join = kind === 'join';
+  const fromLink = join && /^[A-Z]{4}$/.test(ui.prefillCode);
+  const codeField = !join ? '' : fromLink
+    ? `<div class="code-card"><span class="muted small">You're joining room</span><span class="display">${esc(ui.prefillCode)}</span>
+        <input id="code" type="hidden" value="${esc(ui.prefillCode)}"></div>`
+    : `<div class="field"><label for="code">Room code</label>
+        <input id="code" class="input code" maxlength="4" placeholder="ABCD" value="" autocapitalize="characters" inputmode="text" required></div>`;
   return `
     ${header(join ? 'Join a room' : 'Create a room')}
     <hr class="rule">
     <form class="stack" data-form="${kind}" autocomplete="off">
-      ${join ? `<div class="field"><label for="code">Room code</label>
-        <input id="code" class="input code" maxlength="4" placeholder="ABCD" value="${esc(ui.prefillCode)}" autocapitalize="characters" inputmode="text" required></div>` : ''}
-      <div class="field"><label for="name">Player name</label>
-        <input id="name" class="input" maxlength="12" placeholder="Your name" value="${esc(savedName())}" required></div>
+      ${codeField}
+      <div class="field"><label for="name">Your name</label>
+        <input id="name" class="input" maxlength="12" placeholder="Your name" value="${esc(savedName())}" required ${fromLink ? 'autofocus' : ''}></div>
       <p class="error">${esc(ui.error)}</p>
       <button class="btn ${join ? 'pop' : ''} block" type="submit" ${ui.busy ? 'disabled' : ''}>${join ? 'Join game' : 'Create room'}</button>
     </form>
+    ${fromLink ? '<button class="linkbtn" data-action="other-room">Join a different room</button>' : ''}
     <button class="linkbtn" data-action="go-home">← Back</button>`;
 }
 
@@ -247,6 +255,7 @@ function viewLobby(s) {
       <span class="muted small">Tell your friends the code</span>
       <span class="display">${esc(s.code)}</span>
       <button class="btn small dark" data-action="share" style="align-self:center;margin-top:8px">🔗 Share invite link</button>
+      <button class="linkbtn small" data-action="copy-link" style="word-break:break-all">${esc(shareUrl(s.code).replace(/^https?:\/\//, ''))}</button>
     </div>
     <div class="stack" style="gap:8px">
       <div class="row" style="justify-content:space-between;align-items:baseline"><h2 class="heading">Players</h2><span class="muted small">${n} / ${s.maxPlayers}</span></div>
@@ -299,6 +308,7 @@ function viewActive(s) {
     <span class="badge">${CATS[c.category].icon} ${esc(c.category)}</span>
     <p class="challenge-text">${esc(c.text)}</p>
     ${c.groupSize > 1 ? `<p class="group-note">👥 ${c.groupSize} players · first team wins 3 points each</p>` : ''}
+    ${c.link ? `<a class="btn small ink howto" href="${esc(c.link)}" target="_blank" rel="noopener">▶ Watch how</a>` : ''}
     ${c.image ? `<img src="${esc(c.image)}" alt="" style="max-width:100%;border:2px solid var(--ink)">` : ''}
     <div class="spacer"></div>
     ${controls}
@@ -359,11 +369,9 @@ function sayControls(s) {
   if (say.answererId === me) {
     return {
       controls: `<p class="display md center">Say it out loud!</p>
-        <div class="say-answer">
-          <button class="btn" data-action="say-yes" data-hide-at="${say.answerEndsAt}">✅<span>Got it</span></button>
-          <button class="btn alert" data-action="say-no">❌<span>Missed</span></button>
-        </div>`,
-      status: { cls: 'good', text: `<span data-until="${say.answerEndsAt}">${secsLeft(say.answerEndsAt)}</span>s to answer` },
+        <div class="answer-count" data-until="${say.answerEndsAt}">${secsLeft(say.answerEndsAt)}</div>
+        <button class="btn mega cat go" data-action="say-yes" data-hide-at="${say.answerEndsAt}">Completed</button>`,
+      status: { cls: 'good', text: 'Tap Completed as soon as you\'ve said it' },
     };
   }
   if (say.answererId) {
@@ -387,8 +395,7 @@ function sayControls(s) {
 function roundHeadline(s) {
   const r = s.round;
   const a = r.awards;
-  if (r.endReason === 'skipped') return 'Skipped!';
-  if (r.endReason === 'correct') return `${nameOf(a[0].playerId)} got it! +${a[0].points}`;
+    if (r.endReason === 'correct') return `${nameOf(a[0].playerId)} got it! +${a[0].points}`;
   if (r.endReason === 'group_done') return `Team ${a.map((x) => nameOf(x.playerId)).join(' & ')} +3 each`;
   if (!a.some((x) => x.points > 0)) return 'Nobody scored!';
   return r.endReason === 'all_done' ? 'Everyone finished!' : "Time's up!";
@@ -465,16 +472,26 @@ $app.addEventListener('click', async (e) => {
   if (a !== 'leave') ui.leaveArmed = false;
   switch (a) {
     case 'go-create': ui.view = 'create'; ui.error = ''; return render();
-    case 'go-join': ui.view = 'join'; ui.error = ''; return render();
-    case 'go-home': ui.view = 'home'; return render();
+    case 'go-join': ui.view = 'join'; ui.error = ''; ui.prefillCode = ''; return render();
+    case 'go-home': ui.view = 'home'; ui.prefillCode = ''; return render();
     case 'share': {
       const url = shareUrl(ui.state.code);
+      const text = `Join my Chaotic Party game! Room ${ui.state.code}: ${url}`;
       try {
-        if (navigator.share) await navigator.share({ title: 'Chaotic Party', text: `Join my Chaotic Party game! Code ${ui.state.code}`, url });
+        if (navigator.share) await navigator.share({ title: 'Chaotic Party', text });
         else { await navigator.clipboard.writeText(url); toast('Invite link copied'); }
-      } catch {}
+      } catch (err) {
+        if (err && err.name === 'AbortError') return;
+        try { await navigator.clipboard.writeText(url); toast('Invite link copied'); } catch { toast(url); }
+      }
       return;
     }
+    case 'copy-link': {
+      const url = shareUrl(ui.state.code);
+      try { await navigator.clipboard.writeText(url); toast('Invite link copied'); } catch { toast(url); }
+      return;
+    }
+    case 'other-room': ui.prefillCode = ''; ui.error = ''; return render();
     case 'start': return act('start');
     case 'next': return act('next');
     case 'skip': return act('skip');
@@ -552,8 +569,8 @@ $app.addEventListener('input', (e) => {
   render();
   try {
     const [mod, list] = await Promise.all([
-      MOCK ? import('./backend-mock.js') : import('./backend-firebase.js'),
-      fetch('challenges.json').then((r) => r.json()),
+      MOCK ? import('./backend-mock.js?v=0.3.0') : import('./backend-firebase.js?v=0.3.0'),
+      fetch(`challenges.json?v=${Date.now()}`, { cache: 'no-store' }).then((r) => r.json()),
     ]);
     challenges = list.challenges;
     challengeMap = new Map(challenges.map((c) => [c.id, c]));

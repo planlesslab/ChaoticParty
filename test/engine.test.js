@@ -99,12 +99,24 @@ test('cannot finish after the deadline even before a tick', () => {
   assert.throws(() => g.act('u0', 'done'), /Time/);
 });
 
-test('skip: nobody scores', () => {
-  const g = setup('FIND');
-  g.act('u1', 'done');
+test('skip: swaps in a new challenge for the same round, nobody scores', () => {
+  const g = game(challenges, 10);
+  g.act('u0', 'create', { code: 'TEST', name: 'P0' });
+  g.act('u1', 'join', { name: 'P1' });
+  g.act('u2', 'join', { name: 'P2' });
+  g.act('u0', 'start');
+  g.advance(config.getReadyMs);
+  const before = g.round.challengeId;
+  if (g.round.category !== 'SAY' && g.round.groupSize === 1) g.act('u1', 'done');
   assert.throws(() => g.act('u1', 'skip'), /host/);
   g.act('u0', 'skip');
-  assert.equal(g.round.endReason, 'skipped');
+  assert.equal(g.room.phase, 'round');
+  assert.equal(g.room.roundIndex, 0);
+  assert.notEqual(g.round.challengeId, before);
+  assert.equal(g.room.deck[0], g.round.challengeId);
+  assert.equal(new Set(g.room.deck).size, 10);
+  assert.ok(g.room.usedIds.includes(g.round.challengeId));
+  assert.ok(g.round.startsAt > g.t, 'new get-ready countdown');
   assert.deepEqual(g.score(), { u0: 0, u1: 0, u2: 0 });
 });
 
@@ -185,7 +197,7 @@ test('next -> final after last round; play again resets scores', () => {
   const g = setup('FIND');
   ['u0', 'u1', 'u2'].forEach((u) => g.act(u, 'done'));
   g.act('u0', 'next');
-  g.act('u0', 'skip');
+  g.advance(config.getReadyMs + config.roundMs);
   g.act('u0', 'next');
   assert.equal(g.room.phase, 'final');
   g.act('u0', 'playAgain');

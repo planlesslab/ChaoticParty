@@ -222,3 +222,6 @@ hr.rule { border: 0; border-top: 1px solid var(--line); margin: 0; width: 100%; 
 .row > .btn { flex: 1; }
 .safety { border: 2px dashed var(--line); padding: 12px 14px; font-size: 14px; color: var(--muted); }
 .safety b { color: var(--ink); }
+
+.answer-count { font-family: var(--font-display); font-size: 96px; line-height: 1; text-align: center; color: var(--spotlight); text-shadow: 4px 4px 0 var(--pop); }
+.howto { align-self: flex-start; text-decoration: none; }

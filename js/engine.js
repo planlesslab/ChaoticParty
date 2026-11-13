@@ -9,8 +9,8 @@
 // This file is pure JavaScript with no browser or Firebase code, so it can be
 // unit-tested with Node.
 
-import defaultConfig from './config.js';
-import { deal } from './dealer.js';
+import defaultConfig from './config.js?v=0.3.0';
+import { deal } from './dealer.js?v=0.3.0';
 
 export class GameError extends Error {
   constructor(code, message) {
@@ -180,6 +180,20 @@ function startRound(r, ctx) {
   };
 }
 
+function replaceChallenge(r, ctx) {
+  const inDeck = new Set(r.deck);
+  const used = new Set(r.usedIds);
+  const players = activeIds(r).length;
+  const eligible = ctx.challenges.filter((c) => !inDeck.has(c.id) && (c.groupSize || 1) <= players);
+  const fresh = eligible.filter((c) => !used.has(c.id));
+  const pool = fresh.length ? fresh : eligible;
+  if (!pool.length) return false;
+  const pick = pool[Math.floor(ctx.random() * pool.length)];
+  r.deck[r.roundIndex] = pick.id;
+  if (!used.has(pick.id)) r.usedIds.push(pick.id);
+  return true;
+}
+
 function requireLive(r, now, category) {
   const d = r.round;
   if (r.phase !== 'round' || !d || d.ended) throw new GameError('bad_phase', 'No challenge is running');
@@ -326,7 +340,9 @@ export function apply(raw, action, ctx) {
     case 'skip':
       requireHost(r, uid);
       if (r.phase !== 'round' || !r.round || r.round.ended) throw new GameError('bad_phase', 'No round to skip');
-      endRound(r, 'skipped');
+      // A skipped challenge doesn't count: swap in a fresh one for the same round.
+      if (replaceChallenge(r, ctx)) startRound(r, ctx);
+      else endRound(r, 'skipped');
       break;
 
     case 'done': {
@@ -416,7 +432,7 @@ export function view(raw, uid, now, { config = defaultConfig, challengeById } = 
     if (r.phase === 'round') phase = now < d.startsAt ? 'ready' : 'active';
     const ch = challengeById(d.challengeId) || { id: d.challengeId, text: '', category: d.category };
     round = {
-      challenge: { id: ch.id, category: d.category, text: ch.text, groupSize: d.groupSize, image: ch.image || null },
+      challenge: { id: ch.id, category: d.category, text: ch.text, groupSize: d.groupSize, image: ch.image || null, link: ch.link || null },
       startsAt: d.startsAt,
       endsAt: d.endsAt,
       timeUp: d.timeUp,
