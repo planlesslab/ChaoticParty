@@ -105,16 +105,16 @@ This document defines the rules, scoring, challenge system and player screens fo
 
 ## 6. Player screens
 
-Visual style: **Webringo Games style library**. Black canvas, Bungee display type in Spotlight yellow with a Pop pink offset, Figtree body text, square buttons with a hard white offset shadow, white-bordered tiles. Dimmed olive = waiting/disabled.
+Visual style: **Neon Glass**. Deep indigo-to-violet night background with slowly drifting light, frosted ribbed-glass panels with glowing edges, glass buttons lit in neon colours. Unbounded display type with a gradient CHAOTIC PARTY wordmark, Figtree body text.
 
 Design principles: one big button per screen, readable from arm's length, works one-handed, high contrast. Each category has its own colour from the palette.
 
 | Category | Colour | Icon | Button |
 |---|---|---|---|
-| ACTION | Pop pink `#e773b2` | 🤸 | COMPLETED |
-| SAY | Spotlight yellow `#f2ce4d` | 🗣️ | BUZZ IN |
-| FIND | Ink white `#f8f8f8` | 🔍 | FOUND IT |
-| TOUCH | Alert red `#e2453c` | ✋ | DONE |
+| ACTION | Neon pink `#ff5cc8` | 🤸 | COMPLETED |
+| SAY | Neon yellow `#ffd34d` | 🗣️ | BUZZ IN |
+| FIND | Electric blue `#4f8bff` | 🔍 | FOUND IT |
+| TOUCH | Mint `#3ff2b8` | ✋ | DONE |
 
 ### 6.1 Home
 

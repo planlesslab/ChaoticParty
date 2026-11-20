@@ -1,8 +1,8 @@
 // Chaotic Party — phone client.
 // The room lives in Firebase; every action runs the rules engine inside a
 // database transaction, and every phone re-renders when the room changes.
-import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js?v=0.3.0';
-import config from './config.js?v=0.3.0';
+import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js?v=0.4.0';
+import config from './config.js?v=0.4.0';
 
 const $app = document.getElementById('app');
 const $banner = document.getElementById('banner');
@@ -14,7 +14,7 @@ const CATS = {
   FIND: { icon: '🔍', button: 'Found it' },
   TOUCH: { icon: '✋', button: 'Done' },
 };
-export const VERSION = '0.3.0';
+export const VERSION = '0.4.0';
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1';
@@ -203,16 +203,20 @@ function render() {
 }
 
 function header(eyebrow) {
-  return `<header class="top"><div class="stack" style="gap:6px"><p class="eyebrow">${esc(eyebrow)}</p><h1 class="display lg">Chaotic<br>Party</h1></div><img class="mascot" src="img/mascot.png" alt=""></header>`;
+  return `<header class="top"><p class="wordmark sm">Chaotic Party</p><p class="eyebrow">${esc(eyebrow)}</p></header>`;
 }
 
 function viewHome() {
   return `
-    <header class="top"><p class="eyebrow">Webringo Games / 01</p></header>
-    <div class="stack center" style="align-items:center;gap:18px;margin-top:4vh">
-      <img class="mascot big" src="img/mascot.png" alt="Webringo mascot">
-      <h1 class="display xl">Chaotic<br>Party</h1>
-      <p style="font-size:19px;max-width:30ch;margin:0">Race your friends to find, touch, say and do silly real-world challenges, all from your phone.</p>
+    <header class="top"><p class="eyebrow">Party game · 3–10 players</p></header>
+    <div class="stack center" style="align-items:center;gap:22px;margin-top:3vh">
+      <div class="hero-grid" aria-hidden="true">
+        <i class="c">🤸</i><i></i><i class="s">🗣️</i>
+        <i></i><i class="f">🔍</i><i></i>
+        <i class="t">✋</i><i></i><i class="c">⚡</i>
+      </div>
+      <h1 class="wordmark xl">Chaotic<br>Party</h1>
+      <p style="font-size:18px;max-width:30ch;margin:0;color:var(--ink-2)">Race your friends to find, touch, say and do silly real-world challenges, all from your phone.</p>
     </div>
     <div class="spacer"></div>
     <div class="stack">
@@ -286,7 +290,7 @@ function viewReady(s) {
     <div class="hud"><span>${s.roundIndex + 1} / ${s.totalRounds}</span><span></span><span class="right">${s.me.isHost ? '<button class="linkbtn" data-action="skip">Skip</button>' : ''}</span></div>
     <div class="ready">
       <p class="eyebrow">Get ready</p>
-      <div style="font-size:64px">${CATS[c.category].icon}</div>
+      <div class="icon-tile">${CATS[c.category].icon}</div>
       <div class="catname">${esc(c.category)}</div>
       <div class="count" data-until="${s.round.startsAt}">${secsLeft(s.round.startsAt)}</div>
     </div>`;
@@ -569,7 +573,7 @@ $app.addEventListener('input', (e) => {
   render();
   try {
     const [mod, list] = await Promise.all([
-      MOCK ? import('./backend-mock.js?v=0.3.0') : import('./backend-firebase.js?v=0.3.0'),
+      MOCK ? import('./backend-mock.js?v=0.4.0') : import('./backend-firebase.js?v=0.4.0'),
       fetch(`challenges.json?v=${Date.now()}`, { cache: 'no-store' }).then((r) => r.json()),
     ]);
     challenges = list.challenges;

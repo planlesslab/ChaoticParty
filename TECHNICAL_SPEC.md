@@ -27,8 +27,8 @@
 
 ```
 index.html            page shell (fonts, styles, loads js/app.js)
-styles.css            Webringo Games style library
-img/mascot.png
+styles.css            Neon Glass theme
+img/icon.svg          app icon
 challenges.json       100 challenges
 js/config.js          tunable numbers (timers, points, limits)
 js/dealer.js          shuffle + no-repeat + variety rule

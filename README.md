@@ -30,7 +30,7 @@ Game settings (timers, points, player limits) are in [`js/config.js`](js/config.
 
 Designed for a flat: **living room, office and kitchen**. Bathrooms and bedrooms are off limits, and no challenge sends players there.
 
-**Look and feel:** Webringo Games style library (black canvas, Bungee + Figtree, yellow/pink/red). Fonts load from Google Fonts.
+**Look and feel:** Neon Glass — dark indigo background, frosted ribbed-glass panels, neon glow (Unbounded + Figtree fonts from Google Fonts).
 
 **Safety:** walk fast, don't run. Never touch anything hot or sharp. Put things back after each round.
 

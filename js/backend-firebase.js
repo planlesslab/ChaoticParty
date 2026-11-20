@@ -1,6 +1,6 @@
 // Firebase backend: anonymous sign-in + Realtime Database.
 // The rest of the app only talks to the small interface returned here.
-import { firebaseConfig, FIREBASE_SDK_VERSION as V } from './firebase-config.js?v=0.3.0';
+import { firebaseConfig, FIREBASE_SDK_VERSION as V } from './firebase-config.js?v=0.4.0';
 
 const CDN = `https://www.gstatic.com/firebasejs/${V}`;
 
