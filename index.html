@@ -33,14 +33,31 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=0.5.0">
 
-  <!-- Planless Lab standard page header (PART A) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Figtree:wght@400;500;600&display=swap">
-<style>
+ <script src="https://planlesslab.github.io/home/nav.js"></script>
+
   /* ---------- Planless Lab page header ---------- */
-  <script src="https://planlesslab.github.io/home/nav.js"></script>
-  
+  .pl-nav, .pl-head, .pl-foot {
+    --pl-bg: #eef0ff; --pl-ink: #1c2155; --pl-muted: #4b517f; --pl-blue: #4452ee; --pl-line: #d5d9f7;
+    --pl-display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+    --pl-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+    box-sizing: border-box;
+  }
+  .pl-nav *, .pl-head *, .pl-foot * { box-sizing: border-box; }
+  .pl-head, .pl-foot { background: var(--pl-bg); }
+  .pl-nav a:focus-visible, .pl-head a:focus-visible, .pl-foot a:focus-visible { outline: 3px solid #ff6b57; outline-offset: 3px; }
+
+  /* Nav */
+  .pl-nav { position: sticky; top: 0; z-index: 20; background: rgba(238, 240, 255, 0.88);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--pl-line); }
+  .pl-in { max-width: 1100px; margin: 0 auto; padding: 0.8rem 1.5rem; display: flex; align-items: center; gap: 1.25rem; }
+  .pl-brand { font: 800 1.3rem var(--pl-display); letter-spacing: -0.02em; text-decoration: none; white-space: nowrap; color: var(--pl-ink); }
+  .pl-nav ul { flex: 1; min-width: 0; display: flex; gap: 0.2rem; list-style: none; margin: 0; padding: 0; overflow-x: auto; scrollbar-width: none; }
+  .pl-nav ul::-webkit-scrollbar { display: none; }
+  .pl-nav ul li:first-child { margin-left: auto; }
+  .pl-nav ul a { display: block; padding: 0.4rem 0.85rem; border-radius: 99px; font: 600 1rem var(--pl-body); text-decoration: none; color: var(--pl-muted); white-space: nowrap; }
+  .pl-nav ul a:hover { background: #e3e6ff; color: var(--pl-ink); }
+  .pl-nav ul a[aria-current="page"] { color: var(--pl-ink); }
+
   /* Intro */
   /* Full-width background; content stays in a centred 1100px column */
   .pl-head { width: 100%; margin: 0; font-family: var(--pl-body); color: var(--pl-ink);
@@ -77,52 +94,8 @@
 </style>
 </head>
 <body class="on-home">
-  <!-- Planless Lab standard page header (PART B) -->
-<nav class="pl-nav" aria-label="Main"><div class="pl-in">
-  <a class="pl-brand" href="https://planlesslab.github.io/home/">Planless Lab</a>
-  <ul>
-        <li><a href="https://planlesslab.github.io/WeBringo/">WeBringo</a></li>
-    <li><a href="https://planlesslab.github.io/ChaoticParty/" aria-current="page">ChaoticParty</a></li>
-    <li><a href="https://planlesslab.github.io/Bauble-Shake/">Bauble-Shake</a></li>
-  </ul>
-</div></nav>
-<script>
-  // On phones, scroll the nav so this page's link is visible.
-  (function () {
-    var cur = document.querySelector('.pl-nav a[aria-current="page"]');
-    var ul = cur && cur.closest("ul");
-    if (ul && ul.scrollWidth > ul.clientWidth) ul.scrollLeft = cur.parentNode.offsetLeft - ul.offsetLeft - 8;
-  })();
-</script>
-
-<header class="pl-head">
-  <a class="pl-back" href="https://planlesslab.github.io/home/">&larr; All projects</a>
-  <div class="pl-tags"><span class="pl-tag">Party Games</span><span class="pl-tag">Real-world Challenges</span></div>
-  <h1>ChaoticParty</h1>
-  <p class="pl-sub">Let the chaos begin!</p>
-
-  <div class="pl-cols">
-    <div class="pl-desc">
-      <p>ChaoticParty is a multiplayer party challenge game that gets everyone moving, thinking and doing ridiculous things. Race your friends to find objects, touch things, say funny phrases and complete silly real-world challenges — all guided by your phone.</p>
-      <p>Compete for points, embrace the chaos and see who comes out on top!</p>
-    </div>
-
-    <div class="pl-facts">
-      <div class="pl-icon">
-        <img src="img/icon.svg" alt="" width="96" height="96">
-      </div>
-      <dl>
-        <div><dt>Category</dt><dd>Party Games</dd></div>
-        <div><dt>Players</dt><dd>3&ndash;10</dd></div>
-        <div><dt>Play format</dt><dd>In-person (Virtual / Hybrid subject to testing)</dd></div>
-        <div><dt>Device</dt><dd>Mobile / Web</dd></div>
-        <div><dt>Occasions</dt><dd>Parties, Friends' Get-togethers, Social Gatherings, Team Events</dd></div>
-        <div><dt>Game type</dt><dd>Real-world Challenges / Competitive</dd></div>
-      </dl>
-    </div>
-  </div>
-</header>
-
+  
+  
   <!-- ChaoticParty game -->
   <div id="banner" class="banner" hidden>Reconnecting…</div>
   <main id="app" class="app"></main>
