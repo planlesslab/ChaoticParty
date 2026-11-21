@@ -1,8 +1,8 @@
 // Chaotic Party — phone client.
 // The room lives in Firebase; every action runs the rules engine inside a
 // database transaction, and every phone re-renders when the room changes.
-import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js?v=0.4.0';
-import config from './config.js?v=0.4.0';
+import { apply, needsTick, view, GameError, NO_CHANGE, DELETE_ROOM } from './engine.js?v=0.5.0';
+import config from './config.js?v=0.5.0';
 
 const $app = document.getElementById('app');
 const $banner = document.getElementById('banner');
@@ -14,7 +14,7 @@ const CATS = {
   FIND: { icon: '🔍', button: 'Found it' },
   TOUCH: { icon: '✋', button: 'Done' },
 };
-export const VERSION = '0.4.0';
+export const VERSION = '0.5.0';
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
 const params = new URLSearchParams(location.search);
 const MOCK = params.get('mock') === '1';
@@ -195,6 +195,12 @@ function render() {
   const focused = document.activeElement?.id;
   const values = {};
   $app.querySelectorAll('input').forEach((i) => { values[i.id] = i.value; });
+  // Planless Lab header + footer only on the home screen; the game fills the screen everywhere else.
+  const onHome = ui.view === 'home';
+  if (document.body.classList.contains('on-home') !== onHome) {
+    document.body.classList.toggle('on-home', onHome);
+    if (!onHome) window.scrollTo(0, 0);
+  }
   $app.className = 'app' + (s?.round && (s.phase === 'ready' || s.phase === 'active') ? ` cat-${s.round.challenge.category}` : '');
   $app.innerHTML = html;
   $app.querySelectorAll('input').forEach((i) => { if (values[i.id] !== undefined) i.value = values[i.id]; });
@@ -573,7 +579,7 @@ $app.addEventListener('input', (e) => {
   render();
   try {
     const [mod, list] = await Promise.all([
-      MOCK ? import('./backend-mock.js?v=0.4.0') : import('./backend-firebase.js?v=0.4.0'),
+      MOCK ? import('./backend-mock.js?v=0.5.0') : import('./backend-firebase.js?v=0.5.0'),
       fetch(`challenges.json?v=${Date.now()}`, { cache: 'no-store' }).then((r) => r.json()),
     ]);
     challenges = list.challenges;

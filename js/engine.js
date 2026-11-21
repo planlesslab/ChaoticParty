@@ -9,8 +9,8 @@
 // This file is pure JavaScript with no browser or Firebase code, so it can be
 // unit-tested with Node.
 
-import defaultConfig from './config.js?v=0.4.0';
-import { deal } from './dealer.js?v=0.4.0';
+import defaultConfig from './config.js?v=0.5.0';
+import { deal } from './dealer.js?v=0.5.0';
 
 export class GameError extends Error {
   constructor(code, message) {

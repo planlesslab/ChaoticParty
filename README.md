@@ -4,6 +4,10 @@
 
 Chaotic Party is a mobile-first web game for 3–10 players in the same home. Everyone joins a room on their own phone, gets the same random challenge at the same moment, and races to complete it. Fast rounds, simple buttons, lots of laughing.
 
+## Website
+
+The game page uses the **Planless Lab** standard page header: nav, intro and info box, plus the footer. It's live at `https://planlesslab.github.io/ChaoticParty/`. The header and footer show only on the home screen. Once a player creates or joins a room, only the slim Planless Lab nav stays, so the game fills the screen. Page text and SEO tags come from `ChaoticParty.md`, and they're in `index.html`.
+
 ## How a game works
 
 1. One player creates a room and gets a 4-letter room code. That player is the **host** (they play too).

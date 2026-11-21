@@ -349,3 +349,8 @@ hr.rule { border: 0; height: 1px; background: linear-gradient(90deg, transparent
 .cat-FIND .mega.cat { --c2: var(--violet); }
 .cat-TOUCH .mega.cat { --c2: #2fb8ff; --fg: #0c1d2e; text-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
 .tile.done { color: #1b1036; text-shadow: none; }
+
+/* ---------- Planless Lab page header integration ---------- */
+body:not(.on-home) .pl-head, body:not(.on-home) .pl-foot { display: none; }
+.pl-head, .pl-foot { position: relative; z-index: 1; }
+.banner { top: 66px; }
